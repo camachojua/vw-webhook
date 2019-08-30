@@ -10,17 +10,36 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 app.post('/visibilidad', function (req, res) {
-  console.log(req.body.ref)
-  console.log(req.body.sender.login)
-  deploy(res)
+    console.log(req.body.ref)
+    console.log(req.body.sender.login)
+    deploy(res, './deploy.sh')
 });
+
+app.post('/api', function (req, res) {
+    console.log(req.body.ref)
+    console.log(req.body.sender.login)
+    deploy(res, './api.sh')
+    const send = require('gmail-send')({
+        user: 'user@gmail.com',
+        pass: 'supersecret',
+        to: 'anotherone@ciencias.unam.mx',
+        subject: 'Deployment complete!'
+    });
+    send({
+        text:    'This deploy was successful!!',  
+    }, (error, result, fullResult) => {
+        if (error) console.error(error);
+        console.log(result);
+    })
+});
+
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
 });
 
-function deploy(res){
-  childProcess.exec('./deploy.sh', function(err, stdout, stderr){
+function deploy(res, script){
+  childProcess.exec(script, function(err, stdout, stderr){
       if (err) {
         console.error(err);
         return res.sendStatus(500);
