@@ -21,9 +21,9 @@ app.post('/api', function (req, res) {
     deploy(res, './api.sh')
     const send = require('gmail-send')({
         user: 'user@gmail.com',
-        pass: 'supersecret',
-        to: 'anotherone@ciencias.unam.mx',
-        subject: 'Deployment complete!'
+        pass: 'abcdefghijklmnop',
+        to:   'user@gmail.com',
+        subject: 'test subject',
     });
     send({
         text:    'This deploy was successful!!',  
@@ -32,7 +32,6 @@ app.post('/api', function (req, res) {
         console.log(result);
     })
 });
-
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
